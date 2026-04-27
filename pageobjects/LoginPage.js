@@ -1,6 +1,6 @@
 class LoginPage{
     constructor(page){
-        this.page=page;
+        this.page=page;//now we can use page everywere 
         this.signInbutton=page.locator('#login');
         this.UserName=page.locator('#userEmail');
         this.Password=page.locator("[formcontrolname='userPassword']");
@@ -8,12 +8,13 @@ class LoginPage{
     }
     async goTo()
     {
-        await page.goto("https://rahulshettyacademy.com/client/#/auth/login");
+        await this.page.goto("https://rahulshettyacademy.com/client/");
     }
-    async validLogin(username,password){
+    async validLogin(username,password){//Method
         await this.UserName.fill(username);
         await this.Password.fill(password);
         await this.signInbutton.click();
+          await this.page.waitForLoadState('networkidle');
 
     }
 }

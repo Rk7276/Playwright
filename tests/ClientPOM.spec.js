@@ -1,36 +1,33 @@
 const { test, expect } = require('@playwright/test');
 const { text } = require('node:stream/consumers');
-const {LoginPage}=require('../pageobjects/LoginPage');
+const {LoginPage}=require('../pageobjects/LoginPage');//import class
+
 test('client App login',async({page})=>
 {
 const productName='ZARA COAT 3';  
 console.log(await page.title());
 const username='Test7276@gmail.com';
 const password='Rushi@1234';
-
-const loginPage=new LoginPage(page);
-loginPage.goTo();
-loginPage.validLogin(username,password)
 const products=page.locator('.card-body');
 
-await page.waitForLoadState('networkidle');
-await page.locator(".card-body b").first().waitFor();
-const titles=await products.allTextContents();
-console.log(titles); 
-//ZARA COAT 3
+const loginPage=new LoginPage(page);
 
-const count =await products.count();
-for(let i=0;i<count;++i)
-{
-if(await products.nth(i).locator("b").textContent()==productName)
-{
-    //add to cart 
-    await products.nth(i).locator("text= Add To Cart").click();
-// await products.nth(i).locator("button:has-text('Add To Cart')").click();
-    break;
-}
-}   
-await page.locator("[routerlink='/dashboard/cart']").click();
+loginPage.goTo();
+
+loginPage.validLogin(username,password)
+ 
+
+
+
+
+
+
+
+
+
+
+
+
 await page.locator("div li").first().waitFor();
 
 const bool=page.locator("h3:has-text('ZARA COAT 3')").isVisible();
@@ -49,7 +46,7 @@ for(let i=0;i<optionsCount;i++)
     break;
    }
 }
-await expect(page.locator(".user__name")).toContainText(email);
+await expect(page.locator(".user__name")).toContainText(username);
 await page.locator(".action__submit").click();
 
 await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
