@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+ const ceName = 'River Valley Health'; // or exact visible text
 
 test('Verify DashBoard screen', async ({ page }) => {
     await page.goto("https://demo-portal.340bdirectplus.com/login");
@@ -21,20 +22,28 @@ test('Verify DashBoard screen', async ({ page }) => {
     console.log(response.url(), response.status());
     // assertion
     expect(response.status()).toBe(200);
+  
     await page.getByText('Program Details', { exact: true }).click();
     await page.getByText('Configuration Overview', { exact: true }).click();
     await page.waitForLoadState('networkidle');
     const ceidDrop = page.locator("div[name='ceId']");
     ceidDrop.waitFor();
     await ceidDrop.click();
-    const ceName = 'River Valley Health'; // or exact visible text
     await page.getByRole('option', { name: ceName }).click();
     //await page.getByRole('option', { name: /River/i }).click();
-    const searchbtn = page.getByRole('button', { name: 'Search' });
-    await searchbtn.waitFor({ state: 'visible' });
+     const searchbtn = page.getByRole('button', { name: 'Search' });
+  await searchbtn.waitFor({ state: 'visible' });
     await searchbtn.click();
   const row = page.locator('tbody tr').filter({ hasText: ceName });
-
 await expect(row).toBeVisible();
+await expect(page.locator('.loaderWrapper')).toBeHidden();
+await page.getByRole('listitem').filter({
+  hasText: 'Covered Entity Locations'
+}).click();
+//await page.getByText("Covered Entity Locations").click();
+await page.waitForLoadState('networkidle');
+await page.getByRole('option', { name: ceName }).click();
+ await searchbtn.waitFor({ state: 'visible' });
+await searchbtn.click();
 
 });

@@ -1,81 +1,52 @@
 const { test, expect } = require('@playwright/test');
 const { text } = require('node:stream/consumers');
-const {LoginPage}=require('../pageobjects/LoginPage');//import class
+const{POManger}=require('../pageobjects/POManger');
+//First convert Json Into to Javascript object
+//Json ->String->then JS object
+const dataset=JSON.parse(JSON.stringify(require('../utils/placeorderTestData.json')));
 
-test('client App login',async({page})=>
+for(const data of dataset)
+  {
+  
+test(`client App login ${data.productName}`,async({page})=>
 {
-const productName='ZARA COAT 3';  
+  //Create object only one time and call method 
+const pomanger=new POManger(page);
 console.log(await page.title());
-const username='Test7276@gmail.com';
-const password='Rushi@1234';
 const products=page.locator('.card-body');
 
-const loginPage=new LoginPage(page);
+const loginPage=pomanger.getLoginPage();
+await loginPage.goTo();
+await loginPage.validLogin(data.username,data.password)
+const dashboardPage=pomanger.getDashboardPage();
+await dashboardPage.searchProductAddcart(data.productName);
+await dashboardPage.navigateToCart();
+const checkout = pomanger.getcheckoutPage(data.productName);
 
-loginPage.goTo();
+// Verify product in cart page
+await expect(checkout.getProductLocator()).toBeVisible();
 
-loginPage.validLogin(username,password)
- 
+//  Then perform checkout
+await checkout.checkoutPageOperations();
 
-
-
-
-
-
+await expect(checkout.confirmUserName()).toContainText(data.username);
+await checkout.placeorerbutton();
 
 
+await expect(checkout.confirmThankYouMsg()).toHaveText(" Thankyou for the order. ");
 
+const orderid = await checkout.getOrderID();
+console.log(orderid);
+const orderspage = pomanger.getordersPage();
+await orderspage.orderOperation(orderid);
 
+const orderIDDetailsPage = await orderspage.orderDetailsPage();
 
-
-await page.locator("div li").first().waitFor();
-
-const bool=page.locator("h3:has-text('ZARA COAT 3')").isVisible();
-expect(bool).toBeTruthy();
-await page.locator("button:has-text('Checkout')").click();
-await page.locator("[placeholder='Select Country']").pressSequentially('Ind');
-const dropdown =page.locator(".ta-results");
-await dropdown.waitFor();
-const optionsCount =await dropdown.locator("button").count();
-for(let i=0;i<optionsCount;i++)
-{
-   const text=await dropdown.locator("button").nth(i).textContent();
-   if(text.trim()=="Indonesia") 
-   {
-    await dropdown.locator("button").nth(i).click();
-    break;
-   }
-}
-await expect(page.locator(".user__name")).toContainText(username);
-await page.locator(".action__submit").click();
-
-await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
-const OrderID = (await page.locator(".em-spacer-1 .ng-star-inserted").textContent()).replace(/\|/g, '')   // remove pipes
-.trim();              // remove spaces
-console.log(OrderID);
-
-const Ordersbtn=page.locator("button[routerlink='/dashboard/myorders']");
-await Ordersbtn.click();
-await page.waitForLoadState('networkidle');
-await page.locator(".table-bordered tr").first().waitFor();
-//get all rows
-const OrderRows=page.locator(".ng-star-inserted tbody tr");
-const OrderRowsCount=await OrderRows.count();
- for(let i=0;i<OrderRowsCount;i++)
- {
-const orderRecordsRowsID=(await OrderRows.nth(i).locator("th").textContent()).trim();
-if(orderRecordsRowsID===OrderID) //if(OrderID.includes(orderRecordsRowsID))--if we use no need to trim and replace orderiD
-{
-//click view button in the same row
-  await OrderRows.nth(i).locator("button:has-text('View')").click();
-    break;
-}
- }
- const orderIDDetailsPage =await page.locator(" div .col-text").textContent();
-expect(OrderID==orderIDDetailsPage).toBeTruthy();
+expect(orderIDDetailsPage).toContain(orderid);
 
 
 //To grab the text use method textContent() [const keyword]
 //await page.pause();
 
 });
+}

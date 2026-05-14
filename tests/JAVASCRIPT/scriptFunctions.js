@@ -122,3 +122,32 @@ let CalSquare=(num)=>{
   console.log(num*num);
 }
 nums.forEach(CalSquare);
+
+//Q we are given array of marks studens.Filter out of the marks of students that score 90+
+
+let marks=[41,59,95,99,96]
+let score=marks.filter((val)=>{
+  return  val>90
+})
+console.log(score);
+
+//Q Take number n as input from user.Create an array of numbers from 1 to n.Use the reduce method to 
+// calculate sum of all numbers in the array .Use the reduce method to calculate product of all numbers in array
+
+let n=prompt("enter a number:");
+let array=[];
+ for(let i=1;i<=n;i++){
+  array[i-1]=i;//1,2,3,4// 1(0),2(1),3(2),4(3)
+ }
+ console.log(array);
+
+//sum of all numbers
+let sumation=array.reduce((pre,cur)=>{
+return pre+cur;
+})
+console.log("Sum of all numbers :"+sumation)
+//Factoriaal numbers 
+let factorial=array.reduce((pre,cur)=>{
+return pre*cur;
+})
+console.log("factorial Numbers:"+factorial);
