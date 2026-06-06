@@ -22,7 +22,7 @@ WebContext=await browser.newContext({storageState:'state.json'});
 
 })
 
-test('client App login',async()=>
+test('@API client App login',async()=>
 {
     const email="";
 const productName='ZARA COAT 3'; 

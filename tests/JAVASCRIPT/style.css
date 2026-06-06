@@ -1,0 +1,67 @@
+#heading{
+    color:"blue";
+    text-decoration: "line-through";
+    background-color: bisque;
+    font: 240%/1.5 "Times New Roman", Times, serif;
+}
+
+body{
+    background-color: pink;
+}
+button{
+    background-color: black;
+    color: white;
+    font-size: 16px;
+}
+h2{
+    color: red;
+}
+.box{
+    height: 50px;
+    width: 50px; 
+    border:1px solid black;
+    margin: 10px;
+    text-align: center;
+    background-color: turquoise;
+}
+#fruits{
+    background-color: yellow;
+    border: 2px solid black;
+    width: 200px;
+    height: 200px;  
+
+}
+.content{
+    color: red;
+    font-size: 20px;
+}
+.newClass{
+    background-color: green;
+}
+
+.newDiv{
+    color: purple;
+    height: 180px;
+    width: 180px;
+    background-color: blanchedalmond;
+border: 2px solid black;
+    font-family: 'Courier New', Courier, monospace;
+
+}  
+.dark{
+    background-color: orange;
+    color: white;
+} 
+.light{
+    background-color: lightcyan;
+    color:black;
+}
+
+.hoverdark{
+    background-color: black;
+    color: white;
+} 
+.hoverlight{
+    background-color: white;
+    color:black;
+}

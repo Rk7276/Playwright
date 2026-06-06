@@ -2,7 +2,7 @@ const { test, expect,request } = require('@playwright/test');
 const { text } = require('node:stream/consumers');
 const { beforeEach } = require('node:test');
 
-const {APIUtils}=require("./utils/APIUtils");
+const { APIUtils } = require("../utils/APIUtils");
 const loginPayload={userEmail: "Test7276@gmail.com",userPassword: "Rushi@1234"}
 const orderPayload={orders:[{country: "Azerbaijan", productOrderedId: "6960eae1c941646b7a8b3ed3"} ]}
 
